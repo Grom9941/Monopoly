@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Monopoly</string>
+    <string name="todo">TODO</string>
+    <string name="on_several_phone">on several phone</string>
+    <string name="on_one_phone">on one phone</string>
+    <string name="choose_type_of_game">Choose type of game</string>
+    <string name="my">it\'s my</string>
+</resources>
