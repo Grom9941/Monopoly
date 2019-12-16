@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity android:name=".Game.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,10 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BoardCreating"></activity>
-        <activity android:name=".Connection"></activity>
-        <activity android:name=".PlayerColor"></activity>
-        <activity android:name=".GameLogic"></activity>
+        <activity android:name=".Game.BoardCreating"></activity>
+        <activity android:name=".Game.Connection"></activity>
+        <activity android:name=".Game.PlayerColor"></activity>
+        <activity android:name=".Game.GameLogic"></activity>
     </application>
 
     <!-- Required for Nearby Connections -->

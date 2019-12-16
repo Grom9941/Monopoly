@@ -1,4 +1,4 @@
-package com.example.monopoly;
+package com.example.monopoly.Game;
 
 import android.content.Context;
 import android.net.nsd.NsdServiceInfo;

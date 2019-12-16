@@ -108,7 +108,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonroll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="roll the dice"
@@ -128,10 +128,28 @@
             android:id="@+id/payprison"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pay for the prison 50$"
             android:onClick="prison"
-            app:layout_constraintBottom_toTopOf="@+id/button"
+            android:text="Pay for the prison 50$"
+            app:layout_constraintBottom_toTopOf="@+id/buttonroll"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/buybuilding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="buyBuilding"
+            android:text="Buy building"
+            app:layout_constraintBottom_toTopOf="@+id/notbuybuilding"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/notbuybuilding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="notBuyBuilding"
+            android:text="Not buy building"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

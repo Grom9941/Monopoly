@@ -1,7 +1,8 @@
-package com.example.monopoly;
+package com.example.monopoly.Game;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 
@@ -16,13 +17,21 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.monopoly.Database.MyAppDatabase;
+import com.example.monopoly.Database.User;
+import com.example.monopoly.R;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
+
+import static java.util.Arrays.asList;
 
 public class BoardCreating extends AppCompatActivity {
 
     public static final Logger logger = Logger.getGlobal();
+    public static MyAppDatabase myAppDatabase;
 
     int[] colorlayout1 = {0xFFFFA500,0xFFFFA500,0xFFB0B0B0,0xFFFFA500,0xFFB0B0B0,0xFFFFC0CB,
             0xFFFFC0CB,0xFFB0B0B0,0xFFFFC0CB,0xFFB0B0B0,0xFFADD8E6,0xFFADD8E6,0xFFB0B0B0,0xFFADD8E6,0xFFB0B0B0,
@@ -38,16 +47,25 @@ public class BoardCreating extends AppCompatActivity {
             "B & O RAILROAD","ATLANTIC AVENUE","VENTNOR AVENUE","WATER WORKS","MARVIN GARDENS","GO TO JAIL",
             "PACIFIC AVENUE","NORTH CAROLINA AVENUE","COMMUNITY CHEST","PENNSYLVANIA AVENUE","SHORT LINE","CHANCE",
             "PARK PALCE","LUXURY TAX","BOARDWALK"};
+    String[] colorPlayer = {"YELLOW","GREEN","RED","MAGENTA","BLUE", "CYAN"};
 
+    List<List<Integer>> moneyPlayersEpoch = asList(
+            asList(1500),
+            asList(1500),
+            asList(1500),
+            asList(1500),
+            asList(1500),
+            asList(1500) );
     int[] possession = new int[40];
     int[] priceCard = {0,60,0,60,-200,200,100,0,100,120,0,140,150,140,160,200,180,0,180,200,0,220,0,220,240,200,260,260,150,280,0,300,300,0,320,200,0,350,-100,400};
     int[] xPrice = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+    int[] countBuildings = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
     int[] locationId = {0,0,0,0,0,0};
     boolean[] inPrison = {false,false,false,false,false,false};
     boolean[] outOfGame = {false,false,false,false,false,false};
     int numberPlayer = 0;
     final int maxId = 40;
-    int[] moneyPlayer = {500,500,500,500,500,500};
+    int[] moneyPlayer = {1500,1500,1500,1500,1500,1500};
     int[] layout = {R.id.linearLayout1, R.id.linearLayout2};
     int[] listIdMoney =  {R.id.textViewboard1,R.id.textViewboard2,R.id.textViewboard3,R.id.textViewboard4,R.id.textViewboard5,R.id.textViewboard6};
     int[][] x2 = {{1,3},{6,8,9},{11,13,14},{16,18,19},{21,23,24},{26,27,29},{31,32,34},{37,39}};
@@ -56,6 +74,9 @@ public class BoardCreating extends AppCompatActivity {
 
     BlurView blurView;
     Button buttonPrison;
+    Button buttonRand;
+    Button buttonBuyBuilding;
+    Button notButtonBuyBuilding;
     //MenuItem item1;
     //MenuItem item2;
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -63,8 +84,14 @@ public class BoardCreating extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board);
+
+        myAppDatabase = Room.databaseBuilder(getApplicationContext(), MyAppDatabase.class, "userdb").build();
         blurView = findViewById(R.id.blurView);
+        buttonRand = findViewById(R.id.buttonroll);
         buttonPrison = findViewById(R.id.payprison);
+        buttonBuyBuilding = findViewById(R.id.buybuilding);
+        notButtonBuyBuilding = findViewById(R.id.notbuybuilding);
+
         for (int i = 0; i < possession.length; i++)
             possession[i] = -1;
 
@@ -149,6 +176,8 @@ public class BoardCreating extends AppCompatActivity {
             textView.setBackgroundColor(playerColor.colorlayout2[i]);
         }
         buttonPrison.setVisibility(View.GONE);
+        buttonBuyBuilding.setVisibility(View.GONE);
+        notButtonBuyBuilding.setVisibility(View.GONE);
 
         logger.info("created info panel");
 
@@ -164,8 +193,7 @@ public class BoardCreating extends AppCompatActivity {
 
         TextView currentPlayerView = findViewById(listIdMoney[numberPlayer]);
         currentPlayerView.setText(Integer.toString(moneyPlayer[numberPlayer]));
-        Button random = findViewById(R.id.button);
-        random.setVisibility(View.VISIBLE);
+        buttonRand.setVisibility(View.VISIBLE);
 
         TextView textViewCurrent = findViewById(locationId[numberPlayer]);
         PlayerColor playerColor = new PlayerColor();
@@ -174,14 +202,15 @@ public class BoardCreating extends AppCompatActivity {
         checkPlayerEnd(numberBefore);
         checkx2();
         numberPlayer = (numberPlayer + 1)%6;
+        if (inPrison[numberPlayer]) buttonPrison.setVisibility(View.VISIBLE);
     }
 
 
     public void notBuyClick(MenuItem item) {
         blurView.setVisibility(View.GONE);
-        Button random = findViewById(R.id.button);
-        random.setVisibility(View.VISIBLE);
+        buttonRand.setVisibility(View.VISIBLE);
         numberPlayer = (numberPlayer + 1)%6;
+        if (inPrison[numberPlayer]) buttonPrison.setVisibility(View.VISIBLE);
         //item2 = item;
     }
 
@@ -235,6 +264,12 @@ public class BoardCreating extends AppCompatActivity {
     }
 
     private void endPlayer(int number){
+
+        User user = new User();
+        user.setNumberUser(numberBefore);
+        user.setColorUser(colorPlayer[numberBefore]);
+        user.setFinishNumber(endGame);
+
         for (int i = 0; i < possession.length; i++) {
             if(possession[i] == number){
                 possession[i] = -1;
@@ -248,8 +283,9 @@ public class BoardCreating extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void checkPlayerEnd(int numberBefore){
+
         logger.info(outOfGame[numberBefore] + " endPlayer" +  moneyPlayer[numberBefore]);
-        if (!outOfGame[numberBefore] && moneyPlayer[numberBefore] < 0){
+        if (!outOfGame[numberBefore] && moneyPlayer[numberBefore] <= 0){
             logger.info(numberBefore + " endPlayer");
             outOfGame[numberBefore]=true;
             endPlayer(numberBefore);
@@ -261,15 +297,40 @@ public class BoardCreating extends AppCompatActivity {
         }
     }
 
+    public void buyBuilding(View v){
+        logger.info(numberPlayer + " before buy building" + countBuildings[locationId[numberPlayer]]);
+        moneyPlayer[numberPlayer]-=priceCard[locationId[numberPlayer]];
+        countBuildings[locationId[numberPlayer]]++;
+
+        buttonBuyBuilding.setVisibility(View.GONE);
+        notButtonBuyBuilding.setVisibility(View.GONE);
+        logger.info(numberPlayer + " after buy building" + countBuildings[locationId[numberPlayer]]);
+        numberPlayer = (numberPlayer + 1) % 6;
+        if (inPrison[numberPlayer]) buttonPrison.setVisibility(View.VISIBLE);
+        buttonRand.setVisibility(View.VISIBLE);
+
+    }
+
+    public void notBuyBuilding(View v){
+        logger.info(numberPlayer + " not buy building " + countBuildings[locationId[numberPlayer]]);
+
+        buttonBuyBuilding.setVisibility(View.GONE);
+        notButtonBuyBuilding.setVisibility(View.GONE);
+        numberPlayer = (numberPlayer + 1) % 6;
+        if (inPrison[numberPlayer]) buttonPrison.setVisibility(View.VISIBLE);
+        buttonRand.setVisibility(View.VISIBLE);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public  void roll(View v){
         while (moneyPlayer[numberPlayer] < 0){
             numberPlayer = (numberPlayer + 1) % 6;
         }
         numberBefore = numberPlayer;
+        boolean checkCanBuy = false;
+        int numberAfter = (numberPlayer + 1)%6;
         if (moneyPlayer[numberPlayer]>0) {
             //logger.info("clicked roll's button");
-            if (inPrison[(numberPlayer + 1) % 6]) buttonPrison.setVisibility(View.VISIBLE);
 
             TextView currentPlayerView = findViewById(listIdMoney[numberPlayer]);
             int prison1 = 10;
@@ -281,13 +342,22 @@ public class BoardCreating extends AppCompatActivity {
             checkLoop(locationId[numberPlayer] + rand);
             locationId[numberPlayer] = (locationId[numberPlayer] + rand) % (maxId - 1);
 
-            if (!inPrison[numberPlayer]) {
+            if (possession[locationId[numberPlayer]] == numberBefore && !inPrison[numberPlayer]){
+                if (countBuildings[locationId[numberPlayer]] < 5) {
+                    v.setVisibility(View.GONE);
+                    buttonBuyBuilding.setVisibility(View.VISIBLE);
+                    notButtonBuyBuilding.setVisibility(View.VISIBLE);
+                } else {
+                    numberPlayer = (numberPlayer + 1) % 6;
+                }
+            } else if (!inPrison[numberPlayer]) {
                 if (locationId[numberPlayer] == prison1 || locationId[numberPlayer] == prison2) {
                     logger.info(numberPlayer + " to prison");
                     locationId[numberPlayer] = prison1;
                     inPrison[numberPlayer] = true;
                     numberPlayer = (numberPlayer + 1) % 6;
                 } else if (possession[locationId[numberPlayer]] == -1 && priceCard[locationId[numberPlayer]] > 0) {
+                    checkCanBuy = true;
                     logger.info(numberPlayer + " can buy");
                     blurView.setVisibility(View.VISIBLE);
                     v.setVisibility(View.GONE);
@@ -297,6 +367,7 @@ public class BoardCreating extends AppCompatActivity {
                 } else if (possession[locationId[numberPlayer]] == -1 && priceCard[locationId[numberPlayer]] < 0) {
                     logger.info(numberPlayer + " taxation");
                     moneyPlayer[numberPlayer] += priceCard[locationId[numberPlayer]];
+                    moneyPlayersEpoch.get(numberPlayer).add(moneyPlayer[numberPlayer]);
 
 
                     currentPlayerView.setText(Integer.toString(moneyPlayer[numberPlayer]));
@@ -305,7 +376,7 @@ public class BoardCreating extends AppCompatActivity {
                     logger.info(numberPlayer + " should pay a tax other player");
 
                     int playerGetMoney = possession[locationId[numberPlayer]];
-                    int tax = (int) (0.1 * xPrice[locationId[numberPlayer]] * priceCard[locationId[numberPlayer]]);
+                    int tax = (int) (0.1 * xPrice[locationId[numberPlayer]] * countBuildings[locationId[numberPlayer]] * priceCard[locationId[numberPlayer]]);
                     moneyPlayer[numberPlayer] -= tax;
                     moneyPlayer[playerGetMoney] += tax;
 
@@ -325,6 +396,7 @@ public class BoardCreating extends AppCompatActivity {
                 numberPlayer = (numberPlayer + 1) % 6;
             }
         }
+        if (inPrison[numberAfter] && possession[locationId[numberPlayer]] != numberBefore && !checkCanBuy) buttonPrison.setVisibility(View.VISIBLE);
         checkPlayerEnd(numberBefore);
     }
 }

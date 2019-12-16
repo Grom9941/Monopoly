@@ -1,4 +1,4 @@
-package com.example.monopoly;
+package com.example.monopoly.Game;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.example.monopoly.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 

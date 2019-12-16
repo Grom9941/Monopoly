@@ -1,13 +1,4 @@
-package com.example.monopoly;
-
-import android.app.Activity;
-import android.content.Context;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.monopoly.Game;
 
 public class GameLogic extends BoardCreating {
 
