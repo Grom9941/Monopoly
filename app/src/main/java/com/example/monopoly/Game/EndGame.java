@@ -78,5 +78,6 @@ public class EndGame extends AppCompatActivity {
             graph.addSeries(series.get(j));
         }
 
+        BoardCreating.myAppDatabase.myDataObject().delete();
     }
 }

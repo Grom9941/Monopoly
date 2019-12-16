@@ -16,4 +16,7 @@ public interface MyDataObject {
 
     @Query("select * from users")
     public List<User> getUsers();
+
+    @Query("DELETE FROM users")
+    void delete();
 }
