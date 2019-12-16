@@ -1,6 +1,5 @@
 package com.example.monopoly.Game;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -47,7 +46,7 @@ public class EndGame extends AppCompatActivity {
 
         List<List<Integer>> lists = new ArrayList<>();
 
-        String info = "";
+        StringBuilder info = new StringBuilder();
         int max = 0;
         for (User usr : users){
             int number = usr.getNumberUser();
@@ -59,9 +58,9 @@ public class EndGame extends AppCompatActivity {
             }
             int finish = usr.getFinishNumber();
 
-            info = info + "\n\nnumber: " + number + "\n color: " + color + "\nfinish: " + finish;
+            info.append("\n\nnumber: ").append(number).append("\n color: ").append(color).append("\nfinish: ").append(finish);
         }
-        textViewData.setText(info);
+        textViewData.setText(info.toString());
 
         for (int x=0; x < max; x++){
             for (int j=0; j<maxPlayer;j++) {
@@ -78,6 +77,6 @@ public class EndGame extends AppCompatActivity {
             series.get(j).setColor(playerColor.colorlayout2[j]);
             graph.addSeries(series.get(j));
         }
-        
+
     }
 }
