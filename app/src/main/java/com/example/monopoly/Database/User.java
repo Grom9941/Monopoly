@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 @Entity(tableName = "users")
-@TypeConverters({Converters.class})
 public class User {
 
     @PrimaryKey
@@ -17,9 +16,10 @@ public class User {
     @ColumnInfo(name = "color")
     private String colorUser;
 
-//    @ColumnInfo(name = "money_for_player")
-//    private ArrayList<Integer> epochMoney;
+    @ColumnInfo(name = "money_for_player")
+    private ArrayList<Integer> epochMoney;
 
+    @ColumnInfo(name = "finish")
     private int finishNumber;
 
     public int getNumberUser() {
@@ -38,13 +38,13 @@ public class User {
         this.colorUser = colorUser;
     }
 
-//    public ArrayList<Integer> getEpochMoney() {
-//        return epochMoney;
-//    }
-//
-//    public void setEpochMoney(ArrayList<Integer> epochMoney) {
-//        this.epochMoney = epochMoney;
-//    }
+    public ArrayList<Integer> getEpochMoney() {
+        return epochMoney;
+    }
+
+    public void setEpochMoney(ArrayList<Integer> epochMoney) {
+        this.epochMoney = epochMoney;
+    }
 
     public int getFinishNumber() {
         return finishNumber;

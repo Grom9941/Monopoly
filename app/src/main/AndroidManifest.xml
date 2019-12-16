@@ -17,10 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Game.BoardCreating"></activity>
         <activity android:name=".Game.Connection"></activity>
         <activity android:name=".Game.PlayerColor"></activity>
+        <activity android:name=".Game.BoardCreating"></activity>
         <activity android:name=".Game.GameLogic"></activity>
+        <activity android:name=".Game.EndGame"></activity>
     </application>
 
     <!-- Required for Nearby Connections -->

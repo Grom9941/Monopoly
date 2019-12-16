@@ -6,6 +6,7 @@ import androidx.room.Room;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -21,7 +22,9 @@ import com.example.monopoly.Database.MyAppDatabase;
 import com.example.monopoly.Database.User;
 import com.example.monopoly.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -49,13 +52,7 @@ public class BoardCreating extends AppCompatActivity {
             "PARK PALCE","LUXURY TAX","BOARDWALK"};
     String[] colorPlayer = {"YELLOW","GREEN","RED","MAGENTA","BLUE", "CYAN"};
 
-    List<List<Integer>> moneyPlayersEpoch = asList(
-            asList(1500),
-            asList(1500),
-            asList(1500),
-            asList(1500),
-            asList(1500),
-            asList(1500) );
+    List<List<Integer>> moneyPlayersEpoch = new ArrayList<>() ;
     int[] possession = new int[40];
     int[] priceCard = {0,60,0,60,-200,200,100,0,100,120,0,140,150,140,160,200,180,0,180,200,0,220,0,220,240,200,260,260,150,280,0,300,300,0,320,200,0,350,-100,400};
     int[] xPrice = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
@@ -65,7 +62,7 @@ public class BoardCreating extends AppCompatActivity {
     boolean[] outOfGame = {false,false,false,false,false,false};
     int numberPlayer = 0;
     final int maxId = 40;
-    int[] moneyPlayer = {1500,1500,1500,1500,1500,1500};
+    int[] moneyPlayer = {200,200,200,200,200,1500};
     int[] layout = {R.id.linearLayout1, R.id.linearLayout2};
     int[] listIdMoney =  {R.id.textViewboard1,R.id.textViewboard2,R.id.textViewboard3,R.id.textViewboard4,R.id.textViewboard5,R.id.textViewboard6};
     int[][] x2 = {{1,3},{6,8,9},{11,13,14},{16,18,19},{21,23,24},{26,27,29},{31,32,34},{37,39}};
@@ -85,7 +82,12 @@ public class BoardCreating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board);
 
-        myAppDatabase = Room.databaseBuilder(getApplicationContext(), MyAppDatabase.class, "userdb").build();
+        myAppDatabase = Room.databaseBuilder(this, MyAppDatabase.class, "userdb").allowMainThreadQueries().fallbackToDestructiveMigration().build();
+
+        for (int i = 0; i < 6; i++) {
+            List<Integer> list = new ArrayList<>();
+            moneyPlayersEpoch.add(list);
+        }
         blurView = findViewById(R.id.blurView);
         buttonRand = findViewById(R.id.buttonroll);
         buttonPrison = findViewById(R.id.payprison);
@@ -217,6 +219,8 @@ public class BoardCreating extends AppCompatActivity {
     public void prison(View v){
         logger.info(numberPlayer + " pay for prison");
         moneyPlayer[numberPlayer]-=50;
+        TextView currentPlayerView = findViewById(listIdMoney[numberPlayer]);
+        currentPlayerView.setText(Integer.toString(moneyPlayer[numberPlayer]));
         inPrison[numberPlayer]=false;
         buttonPrison.setVisibility(View.GONE);
     }
@@ -253,22 +257,32 @@ public class BoardCreating extends AppCompatActivity {
         }
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void endGame(){
+    private void endGame(int number){
         logger.info( "end Game");
+        User user = new User();
+        user.setNumberUser(number);
+        user.setColorUser(colorPlayer[number]);
+        user.setEpochMoney((ArrayList<Integer>) moneyPlayersEpoch.get(number));
+        user.setFinishNumber(endGame);
 
-        //if (Arrays.stream(moneyPlayer).sum()==0){
-            //Intent intent = new Intent(BoardCreating.this, EndGame.class);
-            //startActivity(intent);
-            //finish();
-        //}
+        myAppDatabase.myDataObject().addUser(user);
+
+        Intent intent = new Intent(BoardCreating.this, EndGame.class);
+        startActivity(intent);
+        finish();
     }
 
     private void endPlayer(int number){
 
         User user = new User();
-        user.setNumberUser(numberBefore);
-        user.setColorUser(colorPlayer[numberBefore]);
+        user.setNumberUser(number);
+        user.setColorUser(colorPlayer[number]);
+        user.setEpochMoney((ArrayList<Integer>) moneyPlayersEpoch.get(number));
         user.setFinishNumber(endGame);
+
+        myAppDatabase.myDataObject().addUser(user);
+        logger.info("user added successfully");
+
 
         for (int i = 0; i < possession.length; i++) {
             if(possession[i] == number){
@@ -291,7 +305,11 @@ public class BoardCreating extends AppCompatActivity {
             endPlayer(numberBefore);
             endGame++;
             if (endGame==5){
-                endGame();
+                int findLast = 0;
+                while (moneyPlayer[findLast] <= 0){
+                    findLast = (findLast + 1) % 6;
+                }
+                endGame(findLast);
             }
             //numberPlayer = (numberPlayer + 1) % 6;
         }
@@ -323,9 +341,12 @@ public class BoardCreating extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public  void roll(View v){
-        while (moneyPlayer[numberPlayer] < 0){
+        while (moneyPlayer[numberPlayer] <= 0){
             numberPlayer = (numberPlayer + 1) % 6;
         }
+
+        moneyPlayersEpoch.get(numberPlayer).add(moneyPlayer[numberPlayer]);
+        logger.info(moneyPlayersEpoch + "");
         numberBefore = numberPlayer;
         boolean checkCanBuy = false;
         int numberAfter = (numberPlayer + 1)%6;
@@ -367,9 +388,6 @@ public class BoardCreating extends AppCompatActivity {
                 } else if (possession[locationId[numberPlayer]] == -1 && priceCard[locationId[numberPlayer]] < 0) {
                     logger.info(numberPlayer + " taxation");
                     moneyPlayer[numberPlayer] += priceCard[locationId[numberPlayer]];
-                    moneyPlayersEpoch.get(numberPlayer).add(moneyPlayer[numberPlayer]);
-
-
                     currentPlayerView.setText(Integer.toString(moneyPlayer[numberPlayer]));
                     numberPlayer = (numberPlayer + 1) % 6;
                 } else if (possession[locationId[numberPlayer]] > -1 && priceCard[locationId[numberPlayer]] > 0) {
