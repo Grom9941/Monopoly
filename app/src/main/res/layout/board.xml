@@ -6,7 +6,8 @@
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/backgroundcolor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -79,32 +80,38 @@
             <TextView
                 android:id="@+id/textViewboard1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textcolor"/>
 
             <TextView
                 android:id="@+id/textViewboard2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textcolor"/>
 
             <TextView
                 android:id="@+id/textViewboard3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textcolor"/>
 
             <TextView
                 android:id="@+id/textViewboard4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textcolor"/>
 
             <TextView
                 android:id="@+id/textViewboard5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textcolor"/>
 
             <TextView
                 android:id="@+id/textViewboard6"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textcolor"/>
         </LinearLayout>
 
         <Button
@@ -113,6 +120,7 @@
             android:layout_height="wrap_content"
             android:text="roll the dice"
             android:onClick="roll"
+            android:background="?attr/buttoncolor"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -121,6 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Information about card"
+            android:textColor="?attr/textcolor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -130,6 +139,7 @@
             android:layout_height="wrap_content"
             android:onClick="prison"
             android:text="Pay for the prison 50$"
+            android:background="?attr/buttoncolor"
             app:layout_constraintBottom_toTopOf="@+id/buttonroll"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -139,6 +149,7 @@
             android:layout_height="wrap_content"
             android:onClick="buyBuilding"
             android:text="Buy building"
+            android:background="?attr/buttoncolor"
             app:layout_constraintBottom_toTopOf="@+id/notbuybuilding"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -148,6 +159,7 @@
             android:layout_height="wrap_content"
             android:onClick="notBuyBuilding"
             android:text="Not buy building"
+            android:background="?attr/buttoncolor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

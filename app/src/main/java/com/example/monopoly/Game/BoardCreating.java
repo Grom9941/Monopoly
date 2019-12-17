@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.room.Room;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -74,6 +75,12 @@ public class BoardCreating extends AppCompatActivity {
     //MenuItem item2;
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            setTheme(R.style.darktheme);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board);
@@ -141,10 +148,17 @@ public class BoardCreating extends AppCompatActivity {
 
                 textView.setText(names.get(i)[j]);
                 textView.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-                textView.setBackgroundResource(R.drawable.back);
-
+                if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_NO) {
+                    textView.setBackgroundResource(R.drawable.back_white);
+                    textView.setTextColor(Color.BLACK);
+                } else {
+                    textView.setBackgroundResource(R.drawable.back_black);
+                    textView.setTextColor(Color.WHITE);
+                }
                 textView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
                 textView.setId(id);
+                //textView.setTextColor(Integer.parseInt("?attr/backgroundcolor"));
+                //textView.setBackground(Drawable.createFromPath("?attr/backgroundcolor"));
                 if (i == 0) {
                     id--;
                 } else {
@@ -286,7 +300,7 @@ public class BoardCreating extends AppCompatActivity {
                 xPrice[i] = 1;
                 TextView textViewCurrent = findViewById(i);
                 textViewCurrent.setBackgroundColor(Color.WHITE);
-                textViewCurrent.setBackgroundResource(R.drawable.back);
+                textViewCurrent.setBackgroundResource(R.drawable.back_white);
             }
         }
     }

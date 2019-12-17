@@ -3,6 +3,7 @@ package com.example.monopoly.Game;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import com.example.monopoly.R;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class PlayerColor extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,6 +22,12 @@ public class PlayerColor extends AppCompatActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            setTheme(R.style.darktheme);
+            //colorlayout2 = new int[]{Color.DKGRAY,Color.DKGRAY,Color.DKGRAY,Color.DKGRAY,Color.DKGRAY,Color.DKGRAY};
+        } else {
+            setTheme(R.style.AppTheme);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_color);
         dinamicCreation();
@@ -39,6 +47,7 @@ public class PlayerColor extends AppCompatActivity implements View.OnClickListen
                 Button button = new Button(this);
                 button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
                 button.setBackgroundColor(colorlayout2[i]);
+                //button.setBackground(Drawable.createFromPath("?attr/buttoncolor"));
                 button.setTextColor(Color.BLACK);
                 button.setText(R.string.my);
                 linearCurrent.addView(button);
