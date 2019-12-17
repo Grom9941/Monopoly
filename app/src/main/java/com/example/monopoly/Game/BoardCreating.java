@@ -71,6 +71,7 @@ public class BoardCreating extends AppCompatActivity {
     Button buttonRand;
     Button buttonBuyBuilding;
     Button notButtonBuyBuilding;
+    boolean mode = true;
     //MenuItem item1;
     //MenuItem item2;
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -78,6 +79,7 @@ public class BoardCreating extends AppCompatActivity {
 
         if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             setTheme(R.style.darktheme);
+            mode=false;
         } else {
             setTheme(R.style.AppTheme);
         }
@@ -148,7 +150,7 @@ public class BoardCreating extends AppCompatActivity {
 
                 textView.setText(names.get(i)[j]);
                 textView.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-                if(AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_NO) {
+                if(mode) {
                     textView.setBackgroundResource(R.drawable.back_white);
                     textView.setTextColor(Color.BLACK);
                 } else {

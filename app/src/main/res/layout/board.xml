@@ -179,6 +179,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:id="@+id/nav_menu"
-        app:menu="@menu/navigation_menu" />
+        android:background="?attr/backgroundcolor"
+        app:menu="@menu/navigation_menu"
+        app:itemTextColor="?attr/textcolor"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
