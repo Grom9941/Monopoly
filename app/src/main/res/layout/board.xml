@@ -167,7 +167,7 @@
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <!--Any child View here, TabLayout for example-->

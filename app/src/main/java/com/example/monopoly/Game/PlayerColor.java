@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 public class PlayerColor extends AppCompatActivity implements View.OnClickListener {
 
-    int[] colorlayout2 = {Color.YELLOW,Color.GREEN,Color.RED,Color.MAGENTA,Color.BLUE,
+    public static int[] colorlayout2 = {Color.YELLOW,Color.GREEN,Color.RED,Color.MAGENTA,Color.BLUE,
             Color.CYAN};
 
     @Override

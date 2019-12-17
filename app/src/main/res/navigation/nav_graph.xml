@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/start">
+
+    <fragment
+        android:id="@+id/start"
+        android:name="com.example.monopoly.Start"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_start2_to_choose_color"
+            app:destination="@id/choose_color" />
+    </fragment>
+    <fragment
+        android:id="@+id/choose_color"
+        android:name="com.example.monopoly.choose_color"
+        android:label="fragment_choose_color"
+        tools:layout="@layout/fragment_choose_color" >
+        <action
+            android:id="@+id/action_choose_color_to_game"
+            app:destination="@id/game" />
+    </fragment>
+    <fragment
+        android:id="@+id/game"
+        android:name="com.example.monopoly.game"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" />
+</navigation>

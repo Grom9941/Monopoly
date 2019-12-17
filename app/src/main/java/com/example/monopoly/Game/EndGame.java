@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public class EndGame extends AppCompatActivity {
 
@@ -22,6 +23,12 @@ public class EndGame extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
+            setTheme(R.style.darktheme);
+        } else {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.end_game);
 

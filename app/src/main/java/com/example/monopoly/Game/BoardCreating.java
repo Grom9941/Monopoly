@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.monopoly.Database.MyAppDatabase;
 import com.example.monopoly.Database.User;
+import com.example.monopoly.Dialogs.Dialogs;
 import com.example.monopoly.R;
 
 import java.util.ArrayList;
@@ -32,48 +33,47 @@ public class BoardCreating extends AppCompatActivity {
 
     public static final Logger logger = Logger.getGlobal();
     public static MyAppDatabase myAppDatabase;
+    private List<List<Integer>> moneyPlayersEpoch = new ArrayList<>() ;
+    private boolean mode = true;
 
-    int[] colorlayout1 = {0xFFFFA500,0xFFFFA500,0xFFB0B0B0,0xFFFFA500,0xFFB0B0B0,0xFFFFC0CB,
+    private final int[] colorlayout1 = {0xFFFFA500,0xFFFFA500,0xFFB0B0B0,0xFFFFA500,0xFFB0B0B0,0xFFFFC0CB,
             0xFFFFC0CB,0xFFB0B0B0,0xFFFFC0CB,0xFFB0B0B0,0xFFADD8E6,0xFFADD8E6,0xFFB0B0B0,0xFFADD8E6,0xFFB0B0B0,
             0xFFB0B0B0,0xFFA0522D,0xFFB0B0B0,0xFFA0522D,0xFFB0B0B0};
-    int[] colorlayout2 = {0xFFB0B0B0,0xFFFF0000,0xFFB0B0B0,0xFFFF0000,0xFFFF0000,0xFFB0B0B0,
+    private final int[] colorlayout2 = {0xFFB0B0B0,0xFFFF0000,0xFFB0B0B0,0xFFFF0000,0xFFFF0000,0xFFB0B0B0,
             0xFFFFFF00,0xFFFFFF00,0xFFB0B0B0,0xFFFFFF00,0xFFB0B0B0,0xFF90EE90,0xFF90EE90,0xFFB0B0B0,0xFF90EE90,0xFFB0B0B0,0xFFB0B0B0,
             0xFF0000FF,0xFFB0B0B0,0xFF0000FF};
-    String[] nameslayout1 = {"NEW YORK AVENUE","TENNESSEE AVENUE","COMMUNITY CHEST","ST.JAMES PLACE",
+    private final String[] nameslayout1 = {"NEW YORK AVENUE","TENNESSEE AVENUE","COMMUNITY CHEST","ST.JAMES PLACE",
             "PENNSYLVANIA RAILROAD","VIRGINIA AVENUE","STATES AVENUE","ELECTRIC COMPANY","ST.CHARLES PLACE",
             "IN JAIL","CONNECTICUT AVENUE","VERMONT AVENUE","CHANCE","ORIENTAL AVENUE","READING RAILROAD",
             "INCOME TAX","BALTIC AVENUE","COMMUNITY CHEST","MEDITER-RANEAN AVENUE","COLLECT SALARY"};
-    String[] nameslayout2 = {"FREE PARKING","KENTUCKY AVENUE","CHANCE","INDIANA AVENUE","ILLINOIS AVENUE",
+    private  final String[] nameslayout2 = {"FREE PARKING","KENTUCKY AVENUE","CHANCE","INDIANA AVENUE","ILLINOIS AVENUE",
             "B & O RAILROAD","ATLANTIC AVENUE","VENTNOR AVENUE","WATER WORKS","MARVIN GARDENS","GO TO JAIL",
             "PACIFIC AVENUE","NORTH CAROLINA AVENUE","COMMUNITY CHEST","PENNSYLVANIA AVENUE","SHORT LINE","CHANCE",
             "PARK PALCE","LUXURY TAX","BOARDWALK"};
-    String[] colorPlayer = {"YELLOW","GREEN","RED","MAGENTA","BLUE", "CYAN"};
+    private final String[] colorPlayer = {"YELLOW","GREEN","RED","MAGENTA","BLUE", "CYAN"};
 
-    List<List<Integer>> moneyPlayersEpoch = new ArrayList<>() ;
-    int[] possession = new int[40];
-    int[] priceCard = {0,60,0,60,-200,200,100,0,100,120,0,140,150,140,160,200,180,0,180,200,0,220,0,220,240,200,260,260,150,280,0,300,300,0,320,200,0,350,-100,400};
+    public static int[] possession = new int[40];
+    public static int[] priceCard = {0,60,0,60,-200,200,100,0,100,120,0,140,150,140,160,200,180,0,180,200,0,220,0,220,240,200,260,260,150,280,0,300,300,0,320,200,0,350,-100,400};
     int[] xPrice = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
     int[] countBuildings = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-    int[] locationId = {0,0,0,0,0,0};
-    boolean[] inPrison = {false,false,false,false,false,false};
+    public static int[] locationId = {0,0,0,0,0,0};
+    public static boolean[] inPrison = {false,false,false,false,false,false};
     boolean[] outOfGame = {false,false,false,false,false,false};
-    int numberPlayer = 0;
+    public static int numberPlayer = 0;
     final int maxId = 40;
-    int[] moneyPlayer = {200,200,200,200,200,1500};
+    public static int[] moneyPlayer = {200,200,200,200,200,1500};
     int[] layout = {R.id.linearLayout1, R.id.linearLayout2};
-    int[] listIdMoney =  {R.id.textViewboard1,R.id.textViewboard2,R.id.textViewboard3,R.id.textViewboard4,R.id.textViewboard5,R.id.textViewboard6};
+    public static int[] listIdMoney =  {R.id.textViewboard1,R.id.textViewboard2,R.id.textViewboard3,R.id.textViewboard4,R.id.textViewboard5,R.id.textViewboard6};
     int[][] x2 = {{1,3},{6,8,9},{11,13,14},{16,18,19},{21,23,24},{26,27,29},{31,32,34},{37,39}};
     int endGame = 0;
     int numberBefore = 0;
 
-    BlurView blurView;
+    public static BlurView blurView;
     Button buttonPrison;
-    Button buttonRand;
+    public static Button buttonRand;
     Button buttonBuyBuilding;
     Button notButtonBuyBuilding;
-    boolean mode = true;
-    //MenuItem item1;
-    //MenuItem item2;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -111,6 +111,7 @@ public class BoardCreating extends AppCompatActivity {
         //textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.type4, R.drawable.type4, R.drawable.type4, R.drawable.type4);
 
     }
+
     private void blurBackground(){
         float radius = 1f;
 
@@ -301,8 +302,12 @@ public class BoardCreating extends AppCompatActivity {
                 possession[i] = -1;
                 xPrice[i] = 1;
                 TextView textViewCurrent = findViewById(i);
-                textViewCurrent.setBackgroundColor(Color.WHITE);
-                textViewCurrent.setBackgroundResource(R.drawable.back_white);
+                textViewCurrent.setBackground(Drawable.createFromPath("?attr/backgroundcolor"));
+                if (mode) {
+                    textViewCurrent.setBackgroundResource(R.drawable.back_white);
+                } else {
+                    textViewCurrent.setBackgroundResource(R.drawable.back_black);
+                }
             }
         }
     }
@@ -353,6 +358,12 @@ public class BoardCreating extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public  void roll(View v){
+        Dialogs dialogs = new Dialogs(priceCard[locationId[numberPlayer]], moneyPlayer[numberPlayer], BoardCreating.this);
+        dialogs.buyGround();
+        dialogs.buyBuilding();
+        dialogs.inPrison();
+        //dialogs.find
+        //dialogs.show(getSupportFragmentManager(),"example dialog");
         while (moneyPlayer[numberPlayer] <= 0){
             numberPlayer = (numberPlayer + 1) % 6;
         }
