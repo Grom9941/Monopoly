@@ -21,6 +21,8 @@
         <activity android:name=".Game.PlayerColor"></activity>
         <activity android:name=".Game.BoardCreating"></activity>
         <activity android:name=".Game.EndGame"></activity>
+        <activity android:name=".Game.Conditionals"></activity>
+        <activity android:name=".Game.HandlingClick"></activity>
     </application>
 
     <!-- Required for Nearby Connections -->

@@ -8,12 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.monopoly.Game.BoardCreating;
+import com.example.monopoly.Game.HandlingClick;
 import com.example.monopoly.Game.PlayerColor;
-import com.example.monopoly.R;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.example.monopoly.Game.BoardCreating.blurView;
@@ -33,6 +31,8 @@ public class Dialogs extends AppCompatActivity {
     private final int moneyCard;
     private final int moneyPlay;
     private Context context;
+    private String[] textButton = {"Pass", "Buy", "Pass", "Build", "Roll", "Pay"};
+    private String[] textTitle = {"Do you want to buy?", "Do you want to build?", "Do you want to pay to leave prison?"};
 
     public Dialogs(int moneyCard, int moneyPlay, Context context){
         this.moneyCard = moneyCard;
@@ -41,101 +41,38 @@ public class Dialogs extends AppCompatActivity {
         this.context = context;
     }
 
-    public void buyGround(){
+    public void dialogCreate(final int numberDialog){
         new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("Do you want to buy?")
+                .setTitleText(textTitle[numberDialog])
                 .setContentText("Its cost is " + moneyCard + "\nYou have " + moneyPlay)
-                .setCancelButton("Pass", new SweetAlertDialog.OnSweetClickListener() {
+                .setCancelButton(textButton[numberDialog*2], new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
-
-                        blurView.setVisibility(View.GONE);
-                        possession[locationId[numberPlayer]]=numberPlayer;
-                        moneyPlayer[numberPlayer]=moneyPlayer[numberPlayer]-priceCard[locationId[numberPlayer]];
-
-                        TextView currentPlayerView = findViewById(listIdMoney[numberPlayer]);
-                        currentPlayerView.setText(Integer.toString(moneyPlayer[numberPlayer]));
-                        buttonRand.setVisibility(View.VISIBLE);
-
-                        TextView textViewCurrent = findViewById(locationId[numberPlayer]);
-                        PlayerColor playerColor = new PlayerColor();
-                        textViewCurrent.setBackgroundColor(colorlayout2[numberPlayer]);
-                        //item1 = item;
-                        //checkPlayerEnd(numberBefore);
-                        //checkx2();
-                        numberPlayer = (numberPlayer + 1)%6;
-                        //if (inPrison[numberPlayer]) buttonPrison.setVisibility(View.VISIBLE);
+                        if(numberDialog == 1){
+                            new HandlingClick().notBuyClick();
+                        } else if(numberDialog == 2){
+                            HandlingClick.notBuyBuilding();
+                        } else {
+                            //roll again
+                        }
                     }
                 })
-                .setConfirmText("Buy")
+                .setConfirmText(textButton[numberDialog*2+1])
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
+                        if(numberDialog == 1){
+                            new HandlingClick().buyClick();
+                        } else if(numberDialog == 2){
+                            HandlingClick.buyBuilding();
+                        } else {
+                            new HandlingClick().payForPrison();
+                        }
                     }
                 })
 
                 .show();
     }
-
-    public void buyBuilding(){
-        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("Do you want to build?")
-                .setContentText("Its cost is " + moneyCard + "\nYou have " + moneyPlayer)
-                .setCancelButton("Pass", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                    }
-                })
-                .setConfirmText("Build")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                    }
-                })
-
-                .show();
-    }
-
-    public void inPrison(){
-        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("Do you want to pay to leave prison?")
-                .setContentText("Its cost is " + 50 + "\nYou have " + moneyPlayer)
-                .setCancelButton("Roll", new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                    }
-                })
-                .setConfirmText("Pay")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                    }
-                })
-
-                .show();
-    }
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setTitle("Its cost is " + money)
-//                .setPositiveButton("buy", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                })
-//                .setNegativeButton("pass", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                    }
-//                });
-//        return builder.create();
-//    }
-
 }

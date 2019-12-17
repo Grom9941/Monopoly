@@ -133,36 +133,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-        <Button
-            android:id="@+id/payprison"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="prison"
-            android:text="Pay for the prison 50$"
-            android:background="?attr/buttoncolor"
-            app:layout_constraintBottom_toTopOf="@+id/buttonroll"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/buybuilding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="buyBuilding"
-            android:text="Buy building"
-            android:background="?attr/buttoncolor"
-            app:layout_constraintBottom_toTopOf="@+id/notbuybuilding"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/notbuybuilding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="notBuyBuilding"
-            android:text="Not buy building"
-            android:background="?attr/buttoncolor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <eightbitlab.com.blurview.BlurView
