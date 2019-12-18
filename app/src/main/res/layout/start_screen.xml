@@ -17,29 +17,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/button_statistics"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:onClick="clickSeveralPhone"
-        android:text="@string/on_several_phone"
         android:background="?attr/buttoncolor"
+        android:onClick="clickStatistics"
+        android:text="Statistics"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/button_play"
+        app:layout_constraintVertical_bias="0.25"
         tools:ignore="ButtonStyle" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_play"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:onClick="clickOnePhone"
-        android:text="@string/on_one_phone"
         android:background="?attr/buttoncolor"
+        android:onClick="clickPlay"
+        android:text="Play"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button1"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.25"
         tools:ignore="ButtonStyle" />
 
     <Switch
@@ -48,8 +52,7 @@
         android:layout_height="wrap_content"
         android:text="Night mode "
         android:textColor="?attr/textcolor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

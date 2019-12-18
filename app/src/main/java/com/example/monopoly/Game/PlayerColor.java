@@ -21,21 +21,20 @@ public class PlayerColor extends AppCompatActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
         if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             setTheme(R.style.darktheme);
-            //colorlayout2 = new int[]{Color.DKGRAY,Color.DKGRAY,Color.DKGRAY,Color.DKGRAY,Color.DKGRAY,Color.DKGRAY};
         } else {
             setTheme(R.style.AppTheme);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_color);
         dinamicCreation();
-        //GameLogic gameLogic = new GameLogic();
-        //gameLogic.startGame();
-
     }
 
     private void dinamicCreation() {
+
         int[] layout = {R.id.linearLayoutColor1, R.id.linearLayoutColor2};
         int lengthStart = 0;
         int lengthEnd = colorlayout2.length / 2;
@@ -46,7 +45,6 @@ public class PlayerColor extends AppCompatActivity implements View.OnClickListen
                 Button button = new Button(this);
                 button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
                 button.setBackgroundColor(colorlayout2[i]);
-                //button.setBackground(Drawable.createFromPath("?attr/buttoncolor"));
                 button.setTextColor(Color.BLACK);
                 button.setText(R.string.my);
                 linearCurrent.addView(button);
@@ -63,7 +61,6 @@ public class PlayerColor extends AppCompatActivity implements View.OnClickListen
         try {
 
             Intent intent = new Intent(PlayerColor.this, BoardCreating.class);
-            //colorlayout2[view.getId()]
             intent.putExtra("color",((ColorDrawable)view.getBackground()).getColor());
             startActivity(intent);
             finish();

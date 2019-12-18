@@ -15,14 +15,16 @@ import java.util.List;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import static com.example.monopoly.Game.BoardCreating.playersCount;
+import static com.example.monopoly.Game.PlayerColor.colorlayout2;
+
 public class EndGame extends AppCompatActivity {
 
     LineGraphSeries<DataPoint> series1, series2, series3, series4, series5, series6;
 
-    int maxPlayer=6;
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
         if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             setTheme(R.style.darktheme);
         } else {
@@ -56,32 +58,28 @@ public class EndGame extends AppCompatActivity {
         StringBuilder info = new StringBuilder();
         int max = 0;
         for (User usr : users){
-            int number = usr.getNumberUser();
-            String color = usr.getColorUser();
             ArrayList<Integer> money = usr.getEpochMoney();
             lists.add(money);
             if (max < money.size()){
                 max = money.size();
             }
-            int finish = usr.getFinishNumber();
-
-            info.append("\n\nnumber: ").append(number).append("\n color: ").append(color).append("\nfinish: ").append(finish);
         }
         textViewData.setText(info.toString());
 
         for (int x=0; x < max; x++){
-            for (int j=0; j<maxPlayer;j++) {
+            for (int j=0; j<playersCount;j++) {
+
                 if (lists.get(j).size() > x){
                     series.get(j).appendData(new DataPoint(x, lists.get(j).get(x)), true, 10);
                 } else {
                     series.get(j).appendData(new DataPoint(x, 0), true, 10);
                 }
+
             }
         }
 
-        PlayerColor playerColor = new PlayerColor();
-        for (int j=0; j<maxPlayer;j++) {
-            series.get(j).setColor(playerColor.colorlayout2[j]);
+        for (int j=0; j<playersCount;j++) {
+            series.get(j).setColor(colorlayout2[j]);
             graph.addSeries(series.get(j));
         }
 

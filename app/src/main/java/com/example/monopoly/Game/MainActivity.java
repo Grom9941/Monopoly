@@ -53,26 +53,24 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void clickSeveralPhone(View view) {
+    public void clickStatistics(View view) {
 
         try {
 
-            Intent intent = new Intent(MainActivity.this, Connection.class);
+            Intent intent = new Intent(MainActivity.this, Statistics.class);
             startActivity(intent);
-            finish();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void clickOnePhone(View view) {
+    public void clickPlay(View view) {
 
         try {
 
             Intent intent = new Intent(MainActivity.this, PlayerColor.class);
             startActivity(intent);
-            finish();
 
         } catch (Exception e) {
             e.printStackTrace();
