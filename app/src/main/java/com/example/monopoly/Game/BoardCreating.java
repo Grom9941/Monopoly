@@ -56,7 +56,7 @@ public class BoardCreating extends AppCompatActivity {
     public static final String[] colorPlayer = {"YELLOW","GREEN","RED","MAGENTA","BLUE", "CYAN"};
 
     public static final int maxId = 40;
-    public static int playersCount = 6;
+    public static int playersCount = 3;
     public static int[] possession = new int[maxId];
     public static int[] xPrice = new int[maxId];
     public static int[] countBuildings = new int[maxId];
@@ -95,13 +95,13 @@ public class BoardCreating extends AppCompatActivity {
         myAppDatabase = Room.databaseBuilder(this, MyAppDatabase.class, "userdb").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         buttonRand = findViewById(R.id.buttonroll);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < playersCount; i++) {
             List<Integer> list = new ArrayList<>();
             moneyPlayersEpoch.add(list);
             locationId[i] = 0;
             inPrison[i] = false;
             outOfGame[i] = false;
-            moneyPlayer[i] = 1500;
+            moneyPlayer[i] = 200;
         }
 
         for (int i = 0; i < maxId; i++) {
@@ -197,7 +197,7 @@ public class BoardCreating extends AppCompatActivity {
             rand = rand1 + rand2;
 
             new Conditionals(this).checkLoop(locationId[numberPlayer] + rand);
-            locationId[numberPlayer] = (locationId[numberPlayer] + rand) % (maxId - 1);
+            locationId[numberPlayer] = (locationId[numberPlayer] + rand) % (maxId);
             Dialogs dialogs = new Dialogs(priceCard[locationId[numberPlayer]], moneyPlayer[numberPlayer], this);
 
 
@@ -256,7 +256,9 @@ public class BoardCreating extends AppCompatActivity {
     }
 
     public void stopGame(){
-        Intent intent = new Intent(BoardCreating.this, EndGame.class);
+        logger.info("2");
+        Intent intent = new Intent(this, EndGame.class);
+        logger.info("2");
         startActivity(intent);
         finish();
     }

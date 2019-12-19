@@ -69,79 +69,86 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="215dp">
 
             <TextView
-                android:id="@+id/textViewboard1"
-                android:layout_width="match_parent"
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/textcolor"/>
+                android:text="Information about card"
+                android:textColor="?attr/textcolor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textViewboard2"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/textcolor"/>
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:id="@+id/textViewboard3"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/textViewboard1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/textcolor" />
+
+                <TextView
+                    android:id="@+id/textViewboard2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/textcolor" />
+
+                <TextView
+                    android:id="@+id/textViewboard3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/textcolor" />
+
+                <TextView
+                    android:id="@+id/textViewboard4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/textcolor" />
+
+                <TextView
+                    android:id="@+id/textViewboard5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/textcolor" />
+
+                <TextView
+                    android:id="@+id/textViewboard6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/textcolor" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonroll"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/textcolor"/>
+                android:background="?attr/buttoncolor"
+                android:onClick="roll"
+                android:text="roll the dice"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <TextView
-                android:id="@+id/textViewboard4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/textcolor"/>
-
-            <TextView
-                android:id="@+id/textViewboard5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/textcolor"/>
-
-            <TextView
-                android:id="@+id/textViewboard6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/textcolor"/>
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/buttonroll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="roll the dice"
-            android:onClick="roll"
-            android:background="?attr/buttoncolor"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Information about card"
-            android:textColor="?attr/textcolor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/blurView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <!--Any child View here, TabLayout for example-->
-
-    </eightbitlab.com.blurview.BlurView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

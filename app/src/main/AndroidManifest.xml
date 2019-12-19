@@ -17,12 +17,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Game.Statistics"></activity>
-        <activity android:name=".Game.PlayerColor"></activity>
-        <activity android:name=".Game.BoardCreating"></activity>
-        <activity android:name=".Game.EndGame"></activity>
-        <activity android:name=".Game.Conditionals"></activity>
-        <activity android:name=".Game.HandlingClick"></activity>
+        <activity android:name=".Game.Statistics"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Game.PlayerColor"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Game.BoardCreating"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Game.EndGame"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Game.Conditionals"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Game.HandlingClick"
+            android:screenOrientation="portrait"></activity>
     </application>
 
     <!-- Required for Nearby Connections -->

@@ -9,24 +9,7 @@ import com.example.monopoly.R;
 
 import java.util.ArrayList;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import static com.example.monopoly.Game.BoardCreating.colorPlayer;
-import static com.example.monopoly.Game.BoardCreating.endGame;
-import static com.example.monopoly.Game.BoardCreating.logger;
-import static com.example.monopoly.Game.BoardCreating.maxId;
-import static com.example.monopoly.Game.BoardCreating.mode;
-import static com.example.monopoly.Game.BoardCreating.moneyPlayer;
-import static com.example.monopoly.Game.BoardCreating.moneyPlayersEpoch;
-import static com.example.monopoly.Game.BoardCreating.myAppDatabase;
-import static com.example.monopoly.Game.BoardCreating.numberPlayer;
-import static com.example.monopoly.Game.BoardCreating.outOfGame;
-import static com.example.monopoly.Game.BoardCreating.playersCount;
-import static com.example.monopoly.Game.BoardCreating.possession;
-import static com.example.monopoly.Game.BoardCreating.x2;
-import static com.example.monopoly.Game.BoardCreating.xPrice;
-
-public class Conditionals extends AppCompatActivity{
+public class Conditionals extends BoardCreating {
 
     public Activity activity;
 
@@ -43,20 +26,15 @@ public class Conditionals extends AppCompatActivity{
         int owner;
         for (int[] element : x2){
             count = 0;
-            owner = -1;
-            for (int number : element){
-                if (owner == -1){
-                    owner=possession[number];
+            owner = possession[element[0]];
+
+            for (int number : element)
+                if (owner == possession[number])
                     count++;
-                } else if (owner == possession[number]) {
-                    count++;
-                }
-            }
-            if (count == element.length){
-                for (int number : element){
+
+            if (count == element.length)
+                for (int number : element)
                     xPrice[number]=2;
-                }
-            }
         }
     }
 
@@ -80,12 +58,12 @@ public class Conditionals extends AppCompatActivity{
             endPlayer(numberPlayer);
             endGame++;
 
-            if (endGame==5){
-                int findLast = 0;
-                while (moneyPlayer[findLast] <= 0){
-                    findLast++;
+            if (endGame==playersCount-1){
+                int last = 0;
+                while (moneyPlayer[last] <= 0){
+                    last++;
                 }
-                endGame(findLast);
+                addBD(last, true);
             }
             //numberPlayer = (numberPlayer + 1) % 6;
         }
@@ -93,13 +71,7 @@ public class Conditionals extends AppCompatActivity{
 
     private void endPlayer(int number){
 
-        User user = new User();
-        user.setNumberUser(number);
-        user.setColorUser(colorPlayer[number]);
-        user.setEpochMoney((ArrayList<Integer>) moneyPlayersEpoch.get(number));
-        user.setFinishNumber(endGame);
-
-        myAppDatabase.myDataObject().addUser(user);
+        addBD(number,false);
         logger.info("user added successfully");
 
 
@@ -121,9 +93,8 @@ public class Conditionals extends AppCompatActivity{
         }
     }
 
-    private static void endGame(int number){
+    private void addBD(int number, boolean end){
 
-        logger.info( "end Game");
         User user = new User();
         user.setNumberUser(number);
         user.setColorUser(colorPlayer[number]);
@@ -132,6 +103,7 @@ public class Conditionals extends AppCompatActivity{
 
         myAppDatabase.myDataObject().addUser(user);
 
-        new BoardCreating().stopGame();
+        if (end)
+            stopGame();
     }
 }
