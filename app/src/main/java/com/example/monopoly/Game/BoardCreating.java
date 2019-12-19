@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import java.util.logging.Logger;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -38,6 +41,9 @@ public class BoardCreating extends AppCompatActivity {
     public static MyAppDatabase myAppDatabase;
     public static List<List<Integer>> moneyPlayersEpoch = new ArrayList<>() ;
     public static boolean mode = true;
+    RecyclerView recyclerView;
+    MyAdapter myAdapter;
+    ArrayList<Model> arrayRecycle = new ArrayList<>();
 
     private final int[] colorlayout1 = {0xFFFFA500,0xFFFFA500,0xFFB0B0B0,0xFFFFA500,0xFFB0B0B0,0xFFFFC0CB,
             0xFFFFC0CB,0xFFB0B0B0,0xFFFFC0CB,0xFFB0B0B0,0xFFADD8E6,0xFFADD8E6,0xFFB0B0B0,0xFFADD8E6,0xFFB0B0B0,
@@ -93,6 +99,9 @@ public class BoardCreating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board);
 
+        recyclerView = findViewById(R.id.recycle);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         Intent intent = getIntent();
         playersCount = intent.getIntExtra("count", 6);
         locationId = new int[playersCount];
@@ -118,6 +127,12 @@ public class BoardCreating extends AppCompatActivity {
         }
 
         dinamicCreation();
+    }
+
+    public void addRecycleList(String str){
+        Model m = new Model();
+        m.setStr(str);
+        arrayRecycle.add(0,m);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -189,7 +204,8 @@ public class BoardCreating extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public  void roll(View v){
+    public  void roll(View v) {
+        logger.info(String.valueOf(arrayRecycle));
 
         while (moneyPlayer[numberPlayer] <= 0)
             numberPlayer = nextPlayer(numberPlayer);
@@ -197,70 +213,75 @@ public class BoardCreating extends AppCompatActivity {
         moneyPlayersEpoch.get(numberPlayer).add(moneyPlayer[numberPlayer]);
         numberBefore = numberPlayer;
 
-        if (moneyPlayer[numberPlayer]>0) {
+        rand1 = 1 + new Random().nextInt(6);
+        rand2 = 1 + new Random().nextInt(6);
+        rand = rand1 + rand2;
 
-            rand1 = 1 + new Random().nextInt(6);
-            rand2 = 1 + new Random().nextInt(6);
-            rand = rand1 + rand2;
+        new Conditionals(this, this).checkLoop(locationId[numberPlayer] + rand);
+        new Conditionals(this, this).checkLoop(locationId[numberPlayer] + rand);
+        locationId[numberPlayer] = (locationId[numberPlayer] + rand) % (maxId);
+        Dialogs dialogs = new Dialogs(priceCard[locationId[numberPlayer]], moneyPlayer[numberPlayer], this, this);
+        addRecycleList("roll " + rand);
+        addRecycleList("location " + locationId[numberPlayer]);
 
-            new Conditionals(this, this).checkLoop(locationId[numberPlayer] + rand);
-            new Conditionals(this, this).checkLoop(locationId[numberPlayer] + rand);
-            locationId[numberPlayer] = (locationId[numberPlayer] + rand) % (maxId);
-            Dialogs dialogs = new Dialogs(priceCard[locationId[numberPlayer]], moneyPlayer[numberPlayer], this, this);
+        if (!inPrison[numberPlayer]) {
 
+            int prisonCard1 = 10;
+            int prisonCard2 = 30;
+            if (possession[locationId[numberPlayer]] == numberPlayer && countBuildings[locationId[numberPlayer]] < 5) {
 
-           if (!inPrison[numberPlayer]) {
+                logger.info(numberPlayer + " can build");
+                dialogs.dialogCreate(1);
 
-               int prisonCard1 = 10;
-               int prisonCard2 = 30;
-               if (possession[locationId[numberPlayer]] == numberPlayer && countBuildings[locationId[numberPlayer]] < 5) {
+            } else if (locationId[numberPlayer] == prisonCard1 || locationId[numberPlayer] == prisonCard2) {
 
-                        logger.info(numberPlayer + " can build");
-                        dialogs.dialogCreate(1);
+                logger.info(numberPlayer + " to prison");
+                addRecycleList(numberPlayer + " go to the jail");
+                locationId[numberPlayer] = prisonCard1;
+                inPrison[numberPlayer] = true;
+                numberPlayer = nextPlayer(numberPlayer);
 
-                } else if (locationId[numberPlayer] == prisonCard1 || locationId[numberPlayer] == prisonCard2) {
+            } else if (possession[locationId[numberPlayer]] == -1 && priceCard[locationId[numberPlayer]] > 0) {
 
-                    logger.info(numberPlayer + " to prison");
-                    locationId[numberPlayer] = prisonCard1;
-                    inPrison[numberPlayer] = true;
-                    numberPlayer = nextPlayer(numberPlayer);
+                logger.info(numberPlayer + " can buy");
+                dialogs.dialogCreate(0);
 
-                } else if (possession[locationId[numberPlayer]] == -1 && priceCard[locationId[numberPlayer]] > 0) {
+            } else if (possession[locationId[numberPlayer]] == -1 && priceCard[locationId[numberPlayer]] < 0) {
 
-                    logger.info(numberPlayer + " can buy");
-                    dialogs.dialogCreate(0);
+                logger.info(numberPlayer + " taxation");
+                addRecycleList(numberPlayer + " on card with taxation");
+                moneyPlayer[numberPlayer] += priceCard[locationId[numberPlayer]];
+                new HandlingClick(this, this).rewrite(numberPlayer);
+                numberPlayer = nextPlayer(numberPlayer);
 
-                } else if (possession[locationId[numberPlayer]] == -1 && priceCard[locationId[numberPlayer]] < 0) {
+            } else if (priceCard[locationId[numberPlayer]] > 0) {
 
-                    logger.info(numberPlayer + " taxation");
-                    moneyPlayer[numberPlayer] += priceCard[locationId[numberPlayer]];
-                    new HandlingClick(this, this).rewrite(numberPlayer);
-                    numberPlayer = nextPlayer(numberPlayer);
+                logger.info(numberPlayer + " should pay a tax other player");
+                int playerGetMoney = possession[locationId[numberPlayer]];
+                addRecycleList(numberPlayer + " should pay a tax to " + playerGetMoney);
+                int tax = (int) (0.1 * xPrice[locationId[numberPlayer]] * countBuildings[locationId[numberPlayer]] * priceCard[locationId[numberPlayer]]);
+                moneyPlayer[numberPlayer] -= tax;
+                moneyPlayer[playerGetMoney] += tax;
 
-                } else if (priceCard[locationId[numberPlayer]] > 0) {
+                new HandlingClick(this, this).rewrite(numberPlayer);
+                new HandlingClick(this, this).rewrite(playerGetMoney);
 
-                    logger.info(numberPlayer + " should pay a tax other player");
-                    int playerGetMoney = possession[locationId[numberPlayer]];
-                    int tax = (int) (0.1 * xPrice[locationId[numberPlayer]] * countBuildings[locationId[numberPlayer]] * priceCard[locationId[numberPlayer]]);
-                    moneyPlayer[numberPlayer] -= tax;
-                    moneyPlayer[playerGetMoney] += tax;
-
-                    new HandlingClick(this, this).rewrite(numberPlayer);
-                    new HandlingClick(this, this).rewrite(playerGetMoney);
-
-                    numberPlayer = nextPlayer(numberPlayer);
-                } else {
-                    numberPlayer = nextPlayer(numberPlayer);
-                }
+                numberPlayer = nextPlayer(numberPlayer);
             } else {
-
-                logger.info(numberPlayer + " sitting in prison");
-                dialogs = new Dialogs(50, moneyPlayer[numberPlayer], this, this);
-                dialogs.dialogCreate(2);
-
+                addRecycleList(numberPlayer + " got on nothing card");
+                numberPlayer = nextPlayer(numberPlayer);
             }
+        } else {
+
+            logger.info(numberPlayer + " sitting in prison");
+            dialogs = new Dialogs(50, moneyPlayer[numberPlayer], this, this);
+            dialogs.dialogCreate(2);
+
         }
+
         new Conditionals(this, this).checkPlayerEnd(numberBefore);
+        myAdapter = new MyAdapter(this, arrayRecycle);
+        recyclerView.setAdapter(myAdapter);
     }
 
 }

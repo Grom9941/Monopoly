@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="200dp"
+    android:id="@+id/parent_layout">
+
+    <TextView
+        android:id="@+id/title_text_view"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:gravity="right"/>
+
+</RelativeLayout>

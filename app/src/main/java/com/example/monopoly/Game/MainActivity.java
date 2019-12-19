@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NumberDialog.Numb
     }
 
     public void clickStatistics(View view) {
-            Intent intent = new Intent(MainActivity.this, Statistics.class);
+            Intent intent = new Intent(MainActivity.this, LastGameStatistics.class);
             startActivity(intent);
     }
 

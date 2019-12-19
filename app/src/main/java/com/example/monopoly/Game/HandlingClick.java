@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 import static com.example.monopoly.Game.Conditionals.checkx2;
 import static com.example.monopoly.Game.Conditionals.nextPlayer;
 import static com.example.monopoly.Game.PlayerColor.colorlayout2;
@@ -43,6 +45,8 @@ public class HandlingClick extends BoardCreating {
 
     public static void notBuyClick() {
         logger.info("not buy");
+        //addRecycleList("player " + numberPlayer + " buy card №" + locationId[numberPlayer]);
+
         numberPlayer = nextPlayer(numberPlayer);
 
         buttonRand.setVisibility(View.VISIBLE);

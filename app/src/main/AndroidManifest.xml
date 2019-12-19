@@ -17,7 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Game.Statistics"
+        <activity android:name=".Game.LastGameStatistics"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Game.PlayerColor"
             android:screenOrientation="portrait"></activity>
