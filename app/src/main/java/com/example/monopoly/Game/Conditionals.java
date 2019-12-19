@@ -1,6 +1,8 @@
 package com.example.monopoly.Game;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 
@@ -12,9 +14,11 @@ import java.util.ArrayList;
 public class Conditionals extends BoardCreating {
 
     public Activity activity;
+    private Context context;
 
-    public Conditionals(Activity activityCurrent){
+    public Conditionals(Activity activityCurrent, Context contextCurrent){
         this.activity = activityCurrent;
+        this.context = contextCurrent;
     }
 
     public static int nextPlayer(int currentPlayer){
@@ -44,7 +48,7 @@ public class Conditionals extends BoardCreating {
             logger.info(numberPlayer + " next loop");
             moneyPlayer[numberPlayer] += 200;
 
-            new HandlingClick(activity).rewrite(numberPlayer);
+            new HandlingClick(activity, context).rewrite(numberPlayer);
         }
 
     }
@@ -63,7 +67,7 @@ public class Conditionals extends BoardCreating {
                 while (moneyPlayer[last] <= 0){
                     last++;
                 }
-                addBD(last, true);
+                new Conditionals(activity, context).addBD(last, true);
             }
             //numberPlayer = (numberPlayer + 1) % 6;
         }
@@ -96,6 +100,7 @@ public class Conditionals extends BoardCreating {
     private void addBD(int number, boolean end){
 
         User user = new User();
+        user.setId(myAppDatabase.myDataObject().getUsers().size()+1);
         user.setNumberUser(number);
         user.setColorUser(colorPlayer[number]);
         user.setEpochMoney((ArrayList<Integer>) moneyPlayersEpoch.get(number));
@@ -103,7 +108,11 @@ public class Conditionals extends BoardCreating {
 
         myAppDatabase.myDataObject().addUser(user);
 
-        if (end)
-            stopGame();
+        if (end) {
+            Intent intent = new Intent(activity, EndGame.class);
+            logger.info("2");
+            context.startActivity(intent);
+            finish();
+        }
     }
 }

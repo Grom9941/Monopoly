@@ -11,9 +11,11 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.example.monopoly.Dialogs.NumberDialog;
 import com.example.monopoly.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NumberDialog.NumberDialogLister {
+    public static int count = 0;
     Switch aSwitch;
     boolean lightMode = true;
 
@@ -29,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_screen);
         aSwitch = findViewById(R.id.switch1);
-
 
         if (AppCompatDelegate.getDefaultNightMode()==AppCompatDelegate.MODE_NIGHT_YES){
             aSwitch.setChecked(true);
@@ -54,28 +55,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickStatistics(View view) {
-
-        try {
-
             Intent intent = new Intent(MainActivity.this, Statistics.class);
             startActivity(intent);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void clickPlay(View view) {
-
-        try {
-
-            Intent intent = new Intent(MainActivity.this, PlayerColor.class);
-            startActivity(intent);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        NumberDialog numberDialog = new NumberDialog(this);
+        numberDialog.show(getSupportFragmentManager(), "dialog");
     }
 
+    @Override
+    public void applyText(int number) {
+        count = number;
+    }
 }

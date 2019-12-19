@@ -1,6 +1,7 @@
 package com.example.monopoly.Game;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,9 +12,11 @@ import static com.example.monopoly.Game.PlayerColor.colorlayout2;
 public class HandlingClick extends BoardCreating {
 
     private Activity activity;
+    private Context context;
 
-    public HandlingClick(Activity activityCurrent){
+    public HandlingClick(Activity activityCurrent, Context contextCurrent){
         this.activity = activityCurrent;
+        this.context = contextCurrent;
     }
 
     public void rewrite(int numberPlayer){
@@ -31,7 +34,7 @@ public class HandlingClick extends BoardCreating {
         TextView textViewCurrent = activity.findViewById(locationId[numberPlayer]);
         textViewCurrent.setBackgroundColor(colorlayout2[numberPlayer]);
 
-        new Conditionals(activity).checkPlayerEnd(numberPlayer);
+        new Conditionals(activity, context).checkPlayerEnd(numberPlayer);
         checkx2();
         numberPlayer = nextPlayer(numberPlayer);
 

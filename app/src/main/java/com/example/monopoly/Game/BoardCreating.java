@@ -56,17 +56,18 @@ public class BoardCreating extends AppCompatActivity {
     public static final String[] colorPlayer = {"YELLOW","GREEN","RED","MAGENTA","BLUE", "CYAN"};
 
     public static final int maxId = 40;
-    public static int playersCount = 3;
+    public static int playersCount;
     public static int[] possession = new int[maxId];
     public static int[] xPrice = new int[maxId];
     public static int[] countBuildings = new int[maxId];
     public static boolean[] inPrison = new boolean[maxId];
     public static boolean[] outOfGame = new boolean[maxId];
-    public static int[] locationId = new int[playersCount];
-    public static int[] moneyPlayer = new int[playersCount];
+    public static int[] locationId ;
+    public static int[] moneyPlayer;
     public static int numberPlayer = 0;
     public static int endGame = 0;
     public static int numberBefore = 0;
+    public static int startIdThisGame = 0;
     public static int[] layout = {R.id.linearLayout1, R.id.linearLayout2};
     public static int[] listIdMoney =  {R.id.textViewboard1,R.id.textViewboard2,R.id.textViewboard3,
             R.id.textViewboard4,R.id.textViewboard5,R.id.textViewboard6};
@@ -92,7 +93,13 @@ public class BoardCreating extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.board);
 
+        Intent intent = getIntent();
+        playersCount = intent.getIntExtra("count", 6);
+        locationId = new int[playersCount];
+        moneyPlayer = new int[playersCount];
+
         myAppDatabase = Room.databaseBuilder(this, MyAppDatabase.class, "userdb").allowMainThreadQueries().fallbackToDestructiveMigration().build();
+        startIdThisGame = myAppDatabase.myDataObject().getUsers().size();
         buttonRand = findViewById(R.id.buttonroll);
 
         for (int i = 0; i < playersCount; i++) {
@@ -196,9 +203,10 @@ public class BoardCreating extends AppCompatActivity {
             rand2 = 1 + new Random().nextInt(6);
             rand = rand1 + rand2;
 
-            new Conditionals(this).checkLoop(locationId[numberPlayer] + rand);
+            new Conditionals(this, this).checkLoop(locationId[numberPlayer] + rand);
+            new Conditionals(this, this).checkLoop(locationId[numberPlayer] + rand);
             locationId[numberPlayer] = (locationId[numberPlayer] + rand) % (maxId);
-            Dialogs dialogs = new Dialogs(priceCard[locationId[numberPlayer]], moneyPlayer[numberPlayer], this);
+            Dialogs dialogs = new Dialogs(priceCard[locationId[numberPlayer]], moneyPlayer[numberPlayer], this, this);
 
 
            if (!inPrison[numberPlayer]) {
@@ -226,7 +234,7 @@ public class BoardCreating extends AppCompatActivity {
 
                     logger.info(numberPlayer + " taxation");
                     moneyPlayer[numberPlayer] += priceCard[locationId[numberPlayer]];
-                    new HandlingClick(this).rewrite(numberPlayer);
+                    new HandlingClick(this, this).rewrite(numberPlayer);
                     numberPlayer = nextPlayer(numberPlayer);
 
                 } else if (priceCard[locationId[numberPlayer]] > 0) {
@@ -237,8 +245,8 @@ public class BoardCreating extends AppCompatActivity {
                     moneyPlayer[numberPlayer] -= tax;
                     moneyPlayer[playerGetMoney] += tax;
 
-                    new HandlingClick(this).rewrite(numberPlayer);
-                    new HandlingClick(this).rewrite(playerGetMoney);
+                    new HandlingClick(this, this).rewrite(numberPlayer);
+                    new HandlingClick(this, this).rewrite(playerGetMoney);
 
                     numberPlayer = nextPlayer(numberPlayer);
                 } else {
@@ -247,20 +255,12 @@ public class BoardCreating extends AppCompatActivity {
             } else {
 
                 logger.info(numberPlayer + " sitting in prison");
-                dialogs = new Dialogs(50, moneyPlayer[numberPlayer], this);
+                dialogs = new Dialogs(50, moneyPlayer[numberPlayer], this, this);
                 dialogs.dialogCreate(2);
 
             }
         }
-        new Conditionals(this).checkPlayerEnd(numberBefore);
-    }
-
-    public void stopGame(){
-        logger.info("2");
-        Intent intent = new Intent(this, EndGame.class);
-        logger.info("2");
-        startActivity(intent);
-        finish();
+        new Conditionals(this, this).checkPlayerEnd(numberBefore);
     }
 
 }

@@ -10,6 +10,9 @@ import androidx.room.PrimaryKey;
 public class User {
 
     @PrimaryKey
+    private int id;
+
+    @ColumnInfo(name = "user")
     private int numberUser;
 
     @ColumnInfo(name = "color")
@@ -53,4 +56,11 @@ public class User {
         this.finishNumber = finishNumber;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

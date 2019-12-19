@@ -27,12 +27,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayoutColor2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutColor1" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

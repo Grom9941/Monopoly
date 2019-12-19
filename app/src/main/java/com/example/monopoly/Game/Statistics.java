@@ -11,5 +11,4 @@ import com.google.android.gms.nearby.connection.Strategy;
 
 public class Statistics {
 
-
 }

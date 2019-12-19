@@ -18,7 +18,7 @@ public class PlayerColor extends AppCompatActivity implements View.OnClickListen
 
     public static int[] colorlayout2 = {Color.YELLOW,Color.GREEN,Color.RED,Color.MAGENTA,Color.BLUE,
             Color.CYAN};
-
+    private int numberPlayer;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -30,43 +30,32 @@ public class PlayerColor extends AppCompatActivity implements View.OnClickListen
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.player_color);
+        Intent intent = getIntent();
+        numberPlayer = intent.getIntExtra("count", 6);
         dinamicCreation();
     }
 
     private void dinamicCreation() {
 
-        int[] layout = {R.id.linearLayoutColor1, R.id.linearLayoutColor2};
-        int lengthStart = 0;
-        int lengthEnd = colorlayout2.length / 2;
-        for (int value : layout) {
-            LinearLayout linearCurrent = findViewById(value);
+         LinearLayout linearCurrent = findViewById(R.id.linearLayoutColor1);
 
-            for (int i = lengthStart; i < lengthEnd; i++) {
-                Button button = new Button(this);
-                button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
-                button.setBackgroundColor(colorlayout2[i]);
-                button.setTextColor(Color.BLACK);
-                button.setText(R.string.my);
-                linearCurrent.addView(button);
-
-                button.setOnClickListener(this);
-            }
-            lengthStart = colorlayout2.length / 2;
-            lengthEnd = colorlayout2.length;
+        for (int i = 0; i < numberPlayer; i++) {
+            Button button = new Button(this);
+            button.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+            button.setBackgroundColor(colorlayout2[i]);
+            button.setTextColor(Color.BLACK);
+            button.setText(R.string.my);
+            linearCurrent.addView(button);
+            button.setOnClickListener(this);
         }
     }
 
     @Override
     public void onClick(View view) {
-        try {
-
-            Intent intent = new Intent(PlayerColor.this, BoardCreating.class);
-            intent.putExtra("color",((ColorDrawable)view.getBackground()).getColor());
-            startActivity(intent);
-            finish();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Intent intent = new Intent(PlayerColor.this, BoardCreating.class);
+        intent.putExtra("color", ((ColorDrawable) view.getBackground()).getColor());
+        intent.putExtra("count", numberPlayer);
+        startActivity(intent);
+        finish();
     }
 }

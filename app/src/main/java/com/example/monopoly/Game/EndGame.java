@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import static com.example.monopoly.Game.BoardCreating.playersCount;
+import static com.example.monopoly.Game.BoardCreating.startIdThisGame;
 import static com.example.monopoly.Game.PlayerColor.colorlayout2;
 
 public class EndGame extends AppCompatActivity {
@@ -34,7 +35,6 @@ public class EndGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.end_game);
 
-        TextView textViewData = findViewById(R.id.data);
         List<User> users = BoardCreating.myAppDatabase.myDataObject().getUsers();
 
         GraphView graph = findViewById(R.id.graph);
@@ -58,13 +58,14 @@ public class EndGame extends AppCompatActivity {
         StringBuilder info = new StringBuilder();
         int max = 0;
         for (User usr : users){
-            ArrayList<Integer> money = usr.getEpochMoney();
-            lists.add(money);
-            if (max < money.size()){
-                max = money.size();
+            if (usr.getId() > startIdThisGame) {
+                ArrayList<Integer> money = usr.getEpochMoney();
+                lists.add(money);
+                if (max < money.size()) {
+                    max = money.size();
+                }
             }
         }
-        textViewData.setText(info.toString());
 
         for (int x=0; x < max; x++){
             for (int j=0; j<playersCount;j++) {
@@ -82,7 +83,5 @@ public class EndGame extends AppCompatActivity {
             series.get(j).setColor(colorlayout2[j]);
             graph.addSeries(series.get(j));
         }
-
-        BoardCreating.myAppDatabase.myDataObject().delete();
     }
 }
